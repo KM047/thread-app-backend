@@ -8,7 +8,14 @@ async function init() {
 
     app.use(express.json());
 
-    app.use("/graphql", expressMiddleware(await createGraphQLServer()));
+    app.use(
+        "/graphql",
+        expressMiddleware(await createGraphQLServer(), {
+            context: async ({ req, res }) => ({
+                token: req.headers.authorization,
+            }),
+        })
+    );
 
     app.get("/", (req, res) => {
         res.json({

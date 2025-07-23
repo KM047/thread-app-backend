@@ -7,6 +7,17 @@ const queries = {
         const users = await prismaClient.user.findMany();
         return users;
     },
+    getUserToken: async (
+        _: any,
+        userCredentials: { email: string; password: string }
+    ) => {
+        const token = await userServices.getUserToken(userCredentials);
+        return token;
+    },
+    getCurrentUser: async (_: any, __: any, context: any) => {
+        const user = await userServices.getUserByToken(context?.token);
+        return user;
+    },
 };
 const mutations = {
     createUser: async (_: any, newUser: IUser) => {
