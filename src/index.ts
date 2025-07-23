@@ -1,31 +1,14 @@
 import express from "express";
-import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@as-integrations/express5";
+import { createGraphQLServer } from "./graphql/index.js";
 
-// Creating a GraphQL server
 async function init() {
     const app = express();
     const PORT = process.env.PORT || 8000;
 
     app.use(express.json());
 
-    const gqlServer = new ApolloServer({
-        typeDefs: `
-        type Query {
-            hello: String
-        }
-    `,
-        resolvers: {
-            Query: {
-                hello: () => "Hello, world!",
-            },
-        },
-    });
-
-    // GraphQL server start
-    await gqlServer.start();
-
-    app.use("/graphql", expressMiddleware(gqlServer));
+    app.use("/graphql", expressMiddleware(await createGraphQLServer()));
 
     app.get("/", (req, res) => {
         res.json({
