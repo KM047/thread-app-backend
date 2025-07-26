@@ -1,6 +1,6 @@
 import { createHmac, randomBytes } from "node:crypto";
 import { prismaClient } from "../lib/db.js";
-import { IUser } from "./../types/index.js";
+import { IUser, IUserUpdate } from "./../types/index.js";
 import JWT from "jsonwebtoken";
 
 class UserServices {
@@ -22,8 +22,39 @@ class UserServices {
         });
     }
 
-    public async getUserByEmail(email: string) {
-        return await prismaClient.user.findFirst({
+    /**
+     * updateUser
+     * Updates user information based on the provided IUserUpdate object.
+     * @param user - An object containing the user's updated information.
+     * @returns A promise that resolves to the updated user object.
+     */
+    public updateUser(user: IUserUpdate) {
+        const { id, firstName, lastName, email } = user;
+        return prismaClient.user.update({
+            where: { id },
+            data: { firstName, lastName, email },
+        });
+    }
+
+    public deleteUser(userId: string) {
+        prismaClient.post.deleteMany({
+            where: { authorId: userId },
+        });
+
+        return prismaClient.user.delete({
+            where: { id: userId },
+        });
+    }
+
+    public updateUserAvatar(id: string, avatar: string) {
+        return prismaClient.user.update({
+            where: { id },
+            data: { avatar },
+        });
+    }
+
+    public getUserByEmail(email: string) {
+        return prismaClient.user.findFirst({
             where: {
                 email: email,
             },
@@ -80,12 +111,21 @@ class UserServices {
 
     public async getUserByToken(token: string) {
         try {
+            if (!token) {
+                throw new Error("No token provided");
+            }
+
             const decodedToken = this.decodeToken(token);
             const user = await prismaClient.user.findUnique({
                 where: {
                     id: decodedToken.id,
                 },
             });
+
+            if (!user) {
+                throw new Error("User not found");
+            }
+
             return user;
         } catch (error) {
             return null;
@@ -93,5 +133,4 @@ class UserServices {
     }
 }
 
-// export default UserServices;
 export const userServices = new UserServices();

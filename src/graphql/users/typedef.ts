@@ -5,5 +5,8 @@ export const typeDefs = `#graphql
         lastName: String
         email: String!
         avatar: String
+        posts: [Post]
+        createdAt: DateTime!
+        updatedAt: DateTime!
     }
 `;

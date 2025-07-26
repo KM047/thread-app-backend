@@ -1,6 +1,6 @@
 import { prismaClient } from "../../lib/db.js";
 import { userServices } from "../../services/user.services.js";
-import { IUser, IUserUpdate } from "../../types/index.js";
+import { IUser } from "../../types/index.js";
 
 const queries = {
     getAllUsers: async () => {
@@ -17,19 +17,6 @@ const queries = {
     getCurrentUser: async (_: any, __: any, context: any) => {
         const user = await userServices.getUserByToken(context?.token);
         return user;
-    },
-    updateUser: async (_: any, user: IUserUpdate) => {
-        const updatedUser = await userServices.updateUser(user);
-        return updatedUser !== null;
-    },
-    updateUserAvatar: async (_: any, avatar: string, context: any) => {
-        const user = await userServices.getUserByToken(context?.token);
-
-        const updatedUser = await userServices.updateUserAvatar(
-            user?.id as string,
-            avatar
-        );
-        return updatedUser !== null;
     },
 };
 const mutations = {

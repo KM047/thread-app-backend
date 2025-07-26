@@ -5,22 +5,53 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-    id String @id @default(uuid())
-    firstName String @map("first_name")
-    lastName String? @map("last_name")
-    email String @unique
-    password String 
-    salt String
-    avatar String?
+    id        String    @id @default(uuid())
+    firstName String    @map("first_name")
+    lastName  String?   @map("last_name")
+    email     String    @unique
+    password  String
+    salt      String
+    avatar    String?
+    posts     Post[]
+    comments  Comment[]
+    createdAt DateTime  @default(now()) @map("created_at")
+    updatedAt DateTime  @updatedAt @map("updated_at")
 
+    @@index([email], name: "idx_users_email")
     @@map("users")
+}
+
+model Post {
+    id        String    @id @default(uuid())
+    title     String    @db.VarChar(255)
+    content   String?
+    author    User      @relation(fields: [authorId], references: [id])
+    authorId  String    @map("author_id")
+    comments  Comment[]
+    createdAt DateTime  @default(now()) @map("created_at")
+    updatedAt DateTime  @updatedAt @map("updated_at")
+
+    @@map("posts")
+}
+
+model Comment {
+    id        String   @id @default(uuid())
+    content   String?
+    author    User     @relation(fields: [authorId], references: [id])
+    authorId  String   @map("author_id")
+    post      Post     @relation(fields: [postId], references: [id])
+    postId    String   @map("post_id")
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    @@map("comments")
 }
