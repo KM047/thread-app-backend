@@ -5,7 +5,7 @@ export const typeDefs = `#graphql
         content: String!
         author: User!
         comments: [Comment]
-        createdAt: DateTime!
-        updatedAt: DateTime!
+        createdAt: String!
+        updatedAt: String!
     }
 `;

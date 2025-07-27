@@ -18,6 +18,13 @@ const queries = {
         const user = await userServices.getUserByToken(context?.token);
         return user;
     },
+};
+const mutations = {
+    createUser: async (_: any, newUser: IUser) => {
+        const user = await userServices.createUser(newUser);
+
+        return user !== null;
+    },
     updateUser: async (_: any, user: IUserUpdate) => {
         const updatedUser = await userServices.updateUser(user);
         return updatedUser !== null;
@@ -30,13 +37,6 @@ const queries = {
             avatar
         );
         return updatedUser !== null;
-    },
-};
-const mutations = {
-    createUser: async (_: any, newUser: IUser) => {
-        const user = await userServices.createUser(newUser);
-
-        return user !== null;
     },
 };
 

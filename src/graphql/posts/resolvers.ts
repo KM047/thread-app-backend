@@ -36,6 +36,12 @@ const mutations = {
             throw new Error("Unauthorized");
         }
 
+        const user = await userServices.getUserByToken(context?.token);
+        if (!user) {
+            throw new Error("Unauthorized");
+        }
+        newPost.author = user as IUser;
+
         const post = await postServices.createPost(newPost);
         if (!post) {
             throw new Error("Failed to create post");

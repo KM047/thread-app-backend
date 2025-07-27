@@ -4,5 +4,4 @@ export const Queries = `
     getAllUsers: [User]
     getUserToken(email: String!, password: String!): String
     getCurrentUser: User
-
 `;

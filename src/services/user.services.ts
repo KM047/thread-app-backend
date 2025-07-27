@@ -103,6 +103,10 @@ class UserServices {
                 token,
                 process.env.JWT_SECRET as string
             ) as any;
+            if (!decoded || !decoded.id) {
+                throw new Error("Invalid token");
+            }
+
             return decoded;
         } catch (error) {
             return null;
@@ -116,6 +120,7 @@ class UserServices {
             }
 
             const decodedToken = this.decodeToken(token);
+
             const user = await prismaClient.user.findUnique({
                 where: {
                     id: decodedToken.id,

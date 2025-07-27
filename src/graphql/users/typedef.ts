@@ -6,7 +6,7 @@ export const typeDefs = `#graphql
         email: String!
         avatar: String
         posts: [Post]
-        createdAt: DateTime!
-        updatedAt: DateTime!
+        createdAt: String!
+        updatedAt: String!
     }
 `;
