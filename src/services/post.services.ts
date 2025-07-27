@@ -3,8 +3,6 @@ import { IPost } from "../types/index.js";
 
 class PostServices {
     public createPost(newPost: IPost) {
-        // Implementation for creating a post
-
         const { title, content, author } = newPost;
         return prismaClient.post.create({
             data: {

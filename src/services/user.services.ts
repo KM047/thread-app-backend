@@ -22,12 +22,6 @@ class UserServices {
         });
     }
 
-    /**
-     * updateUser
-     * Updates user information based on the provided IUserUpdate object.
-     * @param user - An object containing the user's updated information.
-     * @returns A promise that resolves to the updated user object.
-     */
     public updateUser(user: IUserUpdate) {
         const { id, firstName, lastName, email } = user;
         return prismaClient.user.update({
