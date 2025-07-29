@@ -15,6 +15,7 @@ export async function createGraphQLServer() {
             type Query {
                 ${User.queries}
                 ${Post.queries}
+                ${Comment.queries}
                 getContext : ITokenContext
             }
             type ITokenContext {
@@ -24,6 +25,7 @@ export async function createGraphQLServer() {
             type Mutation {
                 ${User.mutations}
                 ${Post.mutations}
+                ${Comment.mutations}
             }
                
                 
@@ -32,6 +34,7 @@ export async function createGraphQLServer() {
             Query: {
                 ...User.resolvers.queries,
                 ...Post.resolvers.queries,
+                ...Comment.resolvers.queries,
                 // This resolver is used to get the context in the frontend
                 getContext: (_: any, __: any, context) => {
                     // console.log("context ===>", context);
@@ -41,6 +44,7 @@ export async function createGraphQLServer() {
             Mutation: {
                 ...User.resolvers.mutations,
                 ...Post.resolvers.mutations,
+                ...Comment.resolvers.mutations,
             },
         },
     });
